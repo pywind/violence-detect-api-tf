@@ -4,7 +4,4 @@ firebase_admin
 uvicorn
 fastapi
 uvicorn
-tempfile
 python-multipart
-datetime
-json
