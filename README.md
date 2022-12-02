@@ -10,7 +10,7 @@ Run APIs with uvicorn
 
 * CD to APIs
 
-```
+```sh
 cd APIs
 ```
 
@@ -19,4 +19,3 @@ Run this command
 ```bash
 uvicorn api_gateway:app
 ```
-

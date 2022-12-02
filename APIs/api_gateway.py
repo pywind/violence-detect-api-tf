@@ -2,7 +2,7 @@
 
 import sys
 sys.path.append('../')
-
+from fastapi.middleware.cors import CORSMiddleware
 
 from predictor.predict import predict_by_video_path
 
@@ -22,6 +22,20 @@ from keras.models import load_model
 
 # Declaring our FastAPI instance
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",
+    "localhost:3000"
+]
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 # Declare firebase
 firebase = FirebaseUtils('firebase-adminsdk.json',
@@ -60,7 +74,7 @@ async def create_prediction(file: UploadFile):
     # No effect result
     insert_to_firebase(result)
     # Response result json
-    return {"prediction": str(result)}
+    return {"prediction": str(result[0])}
 
 def insert_to_firebase(result):
     id = "4"

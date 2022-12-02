@@ -1,18 +1,19 @@
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
-import datetime
+from datetime import datetime
 
 class FirebaseUtils():
-    def __init__(self, credential, db_url):
-        self.__cred = credentials.Certificate(f'../{credential}')
+    def __init__(self, credential: str, db_url):
+        self.__cred = credentials.Certificate(credential)
         self.__app = firebase_admin.initialize_app(self.__cred, {
             'databaseURL': db_url
         })
         self.ref = db.reference("data")
 
-    def add(self, id, data):
-        self.ref.child(id).set(data)
+    # fix push
+    def add(self, data):
+        self.ref.push().set(data)
 
     def update(self, id, data):
         self.ref.child(id).update(data)
@@ -26,41 +27,15 @@ class FirebaseUtils():
     def get_all(self):
         return self.ref.get()
 
-    def build_db_unit(self, st, predict, prob):
+    def build_db_unit(self, predict, prob):
         # using now() to get current time
+        now = datetime.now()
+        
+        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        
         pre_json_object = {
-            "id": str(st),
             "prediction": str(predict),
-            "time": str(datetime.datetime.now()),
+            "time": dt_string,
             "prob": str(prob)
         }
         return pre_json_object
-
-if __name__ == "__main__":
-
-    firebase = FirebaseUtils('firebase-adminsdk.json', 'https://robust-cooler-320801-default-rtdb.asia-southeast1.firebasedatabase.app/')
-
-    data0 = {"id": 0, "prediction": "1",
-            "time": "2022-07-29T19:30:03.283Z", "prob": "0.95"}
-    data1 = {"id": 1, "prediction": "0",
-            "time": "2022-07-30T19:30:03.283Z", "prob": "0.45"}
-    data2 = {"id": 2, "prediction": "0",
-            "time": "2022-07-31T19:30:03.283Z", "prob": "0.35"}
-    data3 = {"id": 3, "prediction": "1",
-            "time": "2022-08-01T19:30:03.283Z", "prob": "0.96"}
-    #init_json = firebase.build_db_unit(st=1, predict=True, prob=0.956)
-    #firebase.add("1", data=init_json)
-# create
-# add("1",data1)
-
-# update
-# update("2",data3)
-
-# delete
-# remove("1")
-
-# read
-# read("1")
-
-# read full
-# print(ref.get())
