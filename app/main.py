@@ -1,7 +1,6 @@
 # Import modules
 import sys 
 
-sys.path.append("/")
 from fastapi.middleware.cors import CORSMiddleware
 
 from predictor.predict import predict_by_video_path

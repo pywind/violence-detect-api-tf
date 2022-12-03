@@ -1,5 +1,5 @@
 tensorflow-cpu
-opencv-python
+opencv-python-headless
 firebase_admin
 uvicorn
 fastapi
